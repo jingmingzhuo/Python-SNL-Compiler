@@ -78,8 +78,8 @@ def run(tokenList: list=None):
     analysisTable=getAnalysisTable(grammar)
 
     # 生成 tokens 以及 ast
-    # token=TokenProcessing(model='list', tokenList=tokenList)
-    token=TokenProcessing('read', 'out.txt')
+    token=TokenProcessing(model='list', tokenList=tokenList)
+    # token=TokenProcessing('list', 'out.txt')
     tree=LL1(grammar,analysisTable,token)
 
     # log(tree.getRoot())

@@ -38,7 +38,7 @@ class RecordType(object):
     return 'record %s' % (self.fieldList)
 
   def __str__(self) -> str:
-    return 'record %s' % (self.fieldList)
+    return 'recordType'
 
 class Symbol(object):
   def __init__(self, name=None, kind=None, type=None) -> None:
@@ -47,7 +47,7 @@ class Symbol(object):
     self.typePtr = type
 
   def __repr__(self) -> str:
-    return "%s\t%s\t%s" % (self.name, self.decKind, self.typePtr)
+    return "%s\t\t\t%s\t\t%s" % (self.name, self.decKind, self.typePtr)
 
 class VarSymbol(Symbol):
   def __init__(self, name=None, type=None, access=None, level=None, off=None, value=None) -> None:
@@ -59,7 +59,7 @@ class VarSymbol(Symbol):
     self.value = value
 
   def __repr__(self) -> str:
-    return "%s\t%s\t%s\t%s" % (
+    return "%s\t%s\t\t%s\t\t%s" % (
       super().__repr__(),
       self.access,
       self.level,
@@ -84,7 +84,7 @@ class ProcedureSymbol(Symbol):
     self.forward = forward
 
   def __repr__(self):
-    return "%s\t%s\t%s" % (
+    return "%s\t%s\t\t%s" % (
       super().__repr__(),
       self.level,
       self.off
@@ -106,8 +106,7 @@ class SymbolTable(list):
     return None
 
   def __repr__(self) -> str:
-    return '''
-    '''.join([''] + [str(i) for i in self])
+    return '\n\t'.join([''] + [str(i) for i in self])
 
   def __contains__(self, item: str) -> bool:
     for sym in self:

@@ -227,12 +227,17 @@ class Analyzer(object):
           log('[[var-dec]] --- break')
           break
 
-        sym: VarSymbol = VarSymbol(type=BaseType(kind=typeName, size=typeName.size))
         self.step_into('ID')
-        sym.name = self.root.now.getNodeVal()
-        sym.access = 'dir'
-        sym.level = self.levelCurrent
-        sym.off = self.offsetCurrent[-1]
+        sym: VarSymbol = VarSymbol(
+          type=BaseType(
+            kind=typeName, 
+            size=typeName.size
+          ),
+          name = self.root.now.getNodeVal(),
+          access='dir',
+          level=self.levelCurrent,
+          off=self.offsetCurrent[-1]
+        )
         self.offsetCurrent[-1] += sym.typePtr.size
         log(f'[[sym-var-name]] -- {sym.name}')
 
@@ -439,7 +444,7 @@ class Analyzer(object):
             self.step_into('ID')
             fieldName = self.root.now.getNodeVal()
             
-            if var.typePtr.type != 'recordType':
+            if var.typePtr.kind != 'recordType':
               self.isErr = True
               self.msgErr = SemanticError.TypeMatchError % (
                 'recordType',

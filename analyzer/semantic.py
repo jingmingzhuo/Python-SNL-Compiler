@@ -57,8 +57,8 @@ class Analyzer(object):
     self.msgErr = None
     self.lineErr = -1
 
-    self.levelCurrent = 0
-    self.offsetCurrent = [0]
+    self.levelCurrent = -1
+    self.offsetCurrent = []
 
     cnt = dfs(root.now, 0)
     log(f'[[treeNodeCount]] -- {cnt}')
@@ -115,13 +115,27 @@ class Analyzer(object):
   # 开始分析
   def analyze(self):
     next(self.ptr)
+    self.levelCurrent += 1
+    self.offsetCurrent.append(0)
+
     log(f'[[program_start]]')
     self.program_start()
+
+    self.levelCurrent += 1
+    self.offsetCurrent.append(0)
+
     log(f'[[declare]]')
     self.declare()
+
+    self.levelCurrent -= 1
+    self.offsetCurrent.pop()
+
     log(f'[[program_pending]]')
     self.program_pending()
+
     log(f'[[the-end]]')
+    self.levelCurrent -= 1
+    self.offsetCurrent.pop()
 
   # 项目开始
   def program_start(self):
@@ -243,10 +257,7 @@ class Analyzer(object):
     while True:
       if (
         self.root.now.isNodeKind('ProcDecMore') and 
-        (
-          self.root.isEmpty() or 
-          self.root.now.getChild(0).isNodeKind('ε')
-        )
+        self.root.now.getChild(0).isNodeKind('ε')
       ): break
 
       self.step_into('ProcName')
@@ -254,7 +265,6 @@ class Analyzer(object):
 
       # 函数名存放在 ProcName 下一步的节点上（第一个子节点）
       procName = self.root.now.getNodeVal()
-      # TODO
       proc: ProcedureSymbol = ProcedureSymbol(
         name=procName, 
         param=SymbolTable(),
@@ -262,8 +272,6 @@ class Analyzer(object):
         level=self.levelCurrent,
         off=self.offsetCurrent[-1],
       )
-      self.levelCurrent += 1
-      self.offsetCurrent.append(0)
 
       symTable = SymbolTable()
       symTable.add(proc)
@@ -276,12 +284,15 @@ class Analyzer(object):
         self.msgErr = SemanticError.DuplicateDefine % procName
         self.print_error()
 
-      else:
-        self.tbSym.add(proc)
-        self.scope.append(symTable)
-        self.tbSym = self.scope[-1]
+      self.tbSym.add(proc)
+      self.scope.append(symTable)
+      self.tbSym = self.scope[-1]
       self.step_into('ParamList')
       self.step()
+
+      # 进入函数变量定义域
+      self.levelCurrent += 1
+      self.offsetCurrent.append(0)
       
       if not self.root.isNodeKind('ε'):
         while True:
@@ -330,9 +341,10 @@ class Analyzer(object):
       self.program_pending()
       self.tbSym = tbSymCur
       self.step_into('ProcDecMore')
-      
+
       self.levelCurrent -= 1
       self.offsetCurrent.pop()
+
 
   # 不同语法进行对应的分析
   def stm_list(self):
@@ -342,20 +354,31 @@ class Analyzer(object):
         self.root.isNodeKind('StmMore') and 
         self.root.now.getChild(0).isNodeKind('ε')
       ): break
+
       self.step_into('Stm')
       curStm = self.root.now.getChild(0).getNodeKind()
       log(f'[[check-stm]] --- {curStm}')
 
       if curStm == 'ConditionalStm':
+        log(f'[[cur-stm]] --- conditional-stm')
         self.conditional_stm()
+        log(f'[[cur-stm]] --- conditional-stm-end')
       elif curStm == 'LoopStm':
+        log(f'[[cur-stm]] --- loop-stm')
         self.loop_stm()
+        log(f'[[cur-stm]] --- loop-stm-end')
       elif curStm == 'InputStm':
+        log(f'[[cur-stm]] --- input-stm')
         self.input_stm()
+        log(f'[[cur-stm]] --- input-stm-end')
       elif curStm == 'OutputStm':
+        log(f'[[cur-stm]] --- output-stm')
         self.output_stm()
+        log(f'[[cur-stm]] --- output-stm-end')
       elif curStm == 'ReturnStm':
+        log(f'[[cur-stm]] --- return-stm')
         self.return_stm()
+        log(f'[[cur-stm]] --- return-stm-end')
       elif curStm == 'ID':
         self.step_into('ID')
         # TODO
@@ -370,11 +393,17 @@ class Analyzer(object):
         decision = self.root.now.getNodeVal()
         varError = True
         var: VarSymbol = None
+
+        log(f'[[stm-list-id-name]] --- {idName}')
+
         for symTable in self.scope[::-1]:
           if idName in symTable:
             varError = False
             var = symTable.get(idName)
+            log(f'[[stm-list-var-name]] --- {var.name}')
+            log(f'[[stm-list-var-type]] --- {var.typePtr}')
             idNode.semantic = var
+            break
 
         if varError:
           self.isErr = True
@@ -394,12 +423,16 @@ class Analyzer(object):
 
           elif choice == '[':
             indType, _ = self.expression()
-            if indType not in ['INTEGER', 'INTC']:
+            log(f'[[should-compare-type-here]] --- 7')
+            log(f'[[should-ind-type-be]] --- {type(var.typePtr)}')
+            if indType.type.__str__() not in ['INTEGER', 'INTC']:
               self.error = True
               self.msgErr = SemanticError.TypeMatchError % ('INTC', indType)
               self.print_error()
-            else:
-              varType = var.typePtr.element.type
+
+            log(f'[[stm-list-type]] --- {var.typePtr}')
+            log(f'[[stm-list-type-element]] --- {var.typePtr.element}')
+            varType = var.typePtr.element
 
           elif choice == '.':
             self.step_into('FieldVar')
@@ -429,6 +462,9 @@ class Analyzer(object):
 
             elif self.root.isNodeKind('['):
               indType, indVal = self.expression()
+
+              log(f'[[should-compare-type-here]] --- 2')
+
               if indType not in ['INTEGER', 'INTC']:
                 self.isErr = True
                 self.msgErr = SemanticError.TypeMatchError % (
@@ -442,6 +478,9 @@ class Analyzer(object):
 
           self.step_into(':=')
           rightType, _ = self.expression()
+          
+          log(f'[[should-compare-type-here]] --- 1')
+
           log(f'[[assign-type-check]] --- {varType} - {rightType}')
           log(f'[[]] --- {self.assign_type_check(varType, rightType)}')
           if varType and not varError:
@@ -601,14 +640,15 @@ class Analyzer(object):
     self.step_into('OF')
     self.step_into('BaseType')
     self.step()
-    bType = BaseType(kind=self.root.getNodeKind())
+    log(f'[[make-array-element-type]] --- {self.root.now.getNodeKind()}')
+    bType = BaseType(kind=self.root.now.getNodeKind())
     top, low = int(top), int(low)
-    typePtr = ArrayType(size=(top - low) * bType.size, low=low, top=top, element=bType)
+    typePtr = ArrayType(low=low, top=top, element=bType)
+    log(f'[[make-array-type]] --- {typePtr}')
     if low < 0 or (low >= top):
       self.isErr = True
       self.msgErr = SemanticError.ArrayDefineError
       self.print_error()
-      return None
 
     return typePtr
   
@@ -624,7 +664,9 @@ class Analyzer(object):
     self.step_into('Exp')
     leftType, leftVal = self.term()
     self.step_into('OtherTerm')
-    expError = False
+
+    log(f'[[should-expression]] --- {leftType} - {leftVal}')
+    
     while True:
       if (
         self.root.isNodeKind('OtherTerm') and 
@@ -633,18 +675,18 @@ class Analyzer(object):
 
       self.step_into('Exp')
       rightType, _ = self.expression()
+
+      log(f'[[should-compare-type-here]] --- 3')
+
       if not self.assign_type_check(leftType, rightType):
-        expError = True
         self.isErr = True
         self.msgErr = SemanticError.TypeMatchError % (
           leftType,
           rightType
         )
         self.print_error()
-      self.step_into('OtherTerm')
 
-    if expError:
-      leftType, leftVal = None, None
+      self.step_into('OtherTerm')
 
     return leftType, leftVal
 
@@ -652,6 +694,7 @@ class Analyzer(object):
   def term(self):
     self.step_into('Term')
     leftType, leftVal = self.factor()
+    log(f'[[should-be-here-term]] --- 1')
     self.step_into('OtherFactor')
     termError = False
     while True:
@@ -659,9 +702,11 @@ class Analyzer(object):
         self.root.isNodeKind('OtherFactor') and 
         self.root.now.getChild(0).isNodeKind('ε')
       ): break
+      log(f'[[should-enter-term]] --- 1')
       
       self.step_into('Term')
       rightType, _ = self.factor()
+      log(f'[[right-type]] --- {rightType}')
 
       if not self.assign_type_check(leftType, rightType):
         termError = True
@@ -683,7 +728,9 @@ class Analyzer(object):
     self.step_into('Factor')
     self.step()
     choice = self.root.getNodeKind()
+    log(f'[[factor-choice]] --- {choice}')
     if choice == '(':
+      log(f'[[should-compare-type-here]] --- 4')
       return self.expression()
     if choice == 'INTC':
       return 'INTC', self.root.now.getNodeVal()
@@ -701,6 +748,7 @@ class Analyzer(object):
       if varName in symTable:
         var = symTable.get(varName)
         self.root.now.semantic = var
+        log(f'[[var-in-table]] --- {varName} - {var.typePtr}')
         break
     
     if var == None:
@@ -715,8 +763,10 @@ class Analyzer(object):
     if choice == 'ε':
       if varError:
         return None, None
-      return var.typePtr, var.value
+      log(f'[[var-type&var-value]] --- {var.typePtr} - {self.root.now.getNodeVal()}')
+      return var.typePtr, self.root.now.getNodeVal()
     if choice == '[':
+      log(f'[[should-compare-type-here]] --- 5')
       return self.expression()
     if choice == '.':
       self.step_into('FieldVar')
@@ -739,14 +789,6 @@ class Analyzer(object):
         self.msgErr = SemanticError.UndefinedField % fieldName
         self.print_error()
 
-        # self.step_into('FieldVarMore')
-        # self.step()
-        # if self.root.isNodeKind('ε'):
-        #   return None, None
-        # if self.root.isNodeKind('['):
-        #   self.expression()
-        #   return None, None
-
       field = fieldList.get(fieldName)
       self.root.now.semantic = field
 
@@ -756,6 +798,7 @@ class Analyzer(object):
         return field.typePtr.type, field.value
       if self.root.isNodeKind('['):
         indType, indVal = self.expression()
+        log(f'[[should-compare-type-here]] --- 6')
         if indType not in ['INTEGER', 'INTC']:
           self.isErr = True
           self.msgErr = SemanticError.TypeMatchError % (
@@ -774,7 +817,6 @@ class Analyzer(object):
     self.stm_list()
     self.step_into('ELSE')
     self.stm_list()
-    self.stm_list()
     self.step_into('FI')
   
   # 分析循环
@@ -783,6 +825,7 @@ class Analyzer(object):
     condition = self.rel_exp()
     self.step_into('DO')
     self.stm_list()
+    # TODO
     self.step_into('ENDWH')
   
   # 分析输入 
@@ -826,5 +869,5 @@ class Analyzer(object):
         rightType
       )
       self.print_error()
-      return False
     return True
+    

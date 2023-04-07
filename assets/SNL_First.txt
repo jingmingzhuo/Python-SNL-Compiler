@@ -1,0 +1,105 @@
+First[(]: (
+First[)]: )
+First[*]: *
+First[+]: +
+First[,]: ,
+First[-]: -
+First[.]: .
+First[..]: ..
+First[/]: /
+First[:=]: :=
+First[;]: ;
+First[<]: <
+First[=]: =
+First[ARRAY]: ARRAY
+First[BEGIN]: BEGIN
+First[CHAR]: CHAR
+First[DO]: DO
+First[ELSE]: ELSE
+First[END]: END
+First[ENDWH]: ENDWH
+First[FI]: FI
+First[ID]: ID
+First[IF]: IF
+First[INTC]: INTC
+First[INTEGER]: INTEGER
+First[OF]: OF
+First[PROCEDURE]: PROCEDURE
+First[PROGRAM]: PROGRAM
+First[READ]: READ
+First[RECORD]: RECORD
+First[RETURN]: RETURN
+First[THEN]: THEN
+First[TYPE]: TYPE
+First[VAR]: VAR
+First[WHILE]: WHILE
+First[WRITE]: WRITE
+First[[]: [
+First[]]: ]
+First[ActParamList]: ( ε INTC ID
+First[ActParamMore]: , ε
+First[AddOp]: + -
+First[ArrayType]: ARRAY
+First[AssCall]: ( [ . :=
+First[AssignmentRest]: [ . :=
+First[BaseType]: CHAR INTEGER
+First[CallStmRest]: (
+First[CmpOp]: = <
+First[ConditionalStm]: IF
+First[DeclarePart]: PROCEDURE ε VAR TYPE
+First[Exp]: ( INTC ID
+First[Factor]: ( INTC ID
+First[FidMore]: , ε
+First[FieldDecList]: CHAR ARRAY INTEGER
+First[FieldDecMore]: ARRAY CHAR ε INTEGER
+First[FieldVar]: ID
+First[FieldVarMore]: ε [
+First[FormList]: ID
+First[IdList]: ID
+First[IdMore]: , ε
+First[InputStm]: READ
+First[Invar]: ID
+First[LoopStm]: WHILE
+First[Low]: INTC
+First[MultOp]: / *
+First[OtherFactor]: / ε *
+First[OtherRelE]: = <
+First[OtherTerm]: + ε -
+First[OutputStm]: WRITE
+First[Param]: RECORD CHAR VAR ARRAY ID INTEGER
+First[ParamDecList]: RECORD CHAR VAR ARRAY ID INTEGER
+First[ParamList]: RECORD CHAR ε VAR ARRAY ID INTEGER
+First[ParamMore]: ε ;
+First[ProcBody]: BEGIN
+First[ProcDec]: PROCEDURE ε
+First[ProcDecMore]: PROCEDURE ε
+First[ProcDecPart]: PROCEDURE ε VAR TYPE
+First[ProcDeclaration]: PROCEDURE
+First[ProcName]: ID
+First[Program]: PROGRAM
+First[ProgramBody]: BEGIN
+First[ProgramHead]: PROGRAM
+First[ProgramName]: ID
+First[RecType]: RECORD
+First[RelExp]: ( INTC ID
+First[ReturnStm]: RETURN
+First[Stm]: WHILE READ RETURN IF ID WRITE
+First[StmList]: WHILE READ RETURN IF ID WRITE
+First[StmMore]: ε ;
+First[StructureType]: RECORD ARRAY
+First[Term]: ( INTC ID
+First[Top]: INTC
+First[TypeDec]: ε TYPE
+First[TypeDecList]: ID
+First[TypeDecMore]: ε ID
+First[TypeDeclaration]: TYPE
+First[TypeId]: ID
+First[TypeName]: RECORD CHAR ARRAY ID INTEGER
+First[VarDec]: VAR ε
+First[VarDecList]: RECORD CHAR ARRAY ID INTEGER
+First[VarDecMore]: RECORD CHAR ε ARRAY ID INTEGER
+First[VarDeclaration]: VAR
+First[VarIdList]: ID
+First[VarIdMore]: , ε
+First[VariMore]: ε [ .
+First[Variable]: ID

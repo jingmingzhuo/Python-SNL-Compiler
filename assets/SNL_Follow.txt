@@ -1,0 +1,67 @@
+Follow[ActParamList]: )
+Follow[ActParamMore]: )
+Follow[AddOp]: ( INTC ID
+Follow[ArrayType]: ; ID
+Follow[AssCall]: END FI ELSE ENDWH ;
+Follow[AssignmentRest]: END FI ELSE ENDWH ;
+Follow[BaseType]: ; ID
+Follow[CallStmRest]: END FI ELSE ENDWH ;
+Follow[CmpOp]: ( INTC ID
+Follow[ConditionalStm]: END FI ELSE ENDWH ;
+Follow[DeclarePart]: BEGIN
+Follow[Exp]: = DO , ; ] ) < FI THEN ELSE ENDWH END
+Follow[Factor]: = / DO * ] - THEN ENDWH END + , ) FI < ELSE ;
+Follow[FidMore]: ) ;
+Follow[FieldDecList]: END
+Follow[FieldDecMore]: END
+Follow[FieldVar]: = / DO := * ] - THEN ENDWH END + , ) FI < ELSE ;
+Follow[FieldVarMore]: = / DO := * ] - THEN ENDWH END + , ) FI < ELSE ;
+Follow[FormList]: ) ;
+Follow[IdList]: ;
+Follow[IdMore]: ;
+Follow[InputStm]: END FI ELSE ENDWH ;
+Follow[Invar]: )
+Follow[LoopStm]: END FI ELSE ENDWH ;
+Follow[Low]: ..
+Follow[MultOp]: ( INTC ID
+Follow[OtherFactor]: = DO ] - THEN ENDWH END + , ) FI < ELSE ;
+Follow[OtherRelE]: THEN DO
+Follow[OtherTerm]: = DO ] THEN ENDWH END , ) FI < ELSE ;
+Follow[OutputStm]: END FI ELSE ENDWH ;
+Follow[Param]: ) ;
+Follow[ParamDecList]: )
+Follow[ParamList]: )
+Follow[ParamMore]: )
+Follow[ProcBody]: PROCEDURE BEGIN
+Follow[ProcDec]: BEGIN
+Follow[ProcDecMore]: BEGIN
+Follow[ProcDecPart]: BEGIN
+Follow[ProcDeclaration]: BEGIN
+Follow[ProcName]: (
+Follow[Program]: #
+Follow[ProgramBody]: PROCEDURE BEGIN .
+Follow[ProgramHead]: VAR PROCEDURE BEGIN TYPE
+Follow[ProgramName]: VAR BEGIN PROCEDURE TYPE
+Follow[RecType]: ; ID
+Follow[RelExp]: THEN DO
+Follow[ReturnStm]: END FI ELSE ENDWH ;
+Follow[Stm]: ; FI ELSE ENDWH END
+Follow[StmList]: FI ELSE ENDWH END
+Follow[StmMore]: FI ELSE ENDWH END
+Follow[StructureType]: ; ID
+Follow[Term]: = DO ] - THEN ENDWH END + , ) FI < ELSE ;
+Follow[Top]: ]
+Follow[TypeDec]: PROCEDURE BEGIN VAR
+Follow[TypeDecList]: VAR PROCEDURE BEGIN
+Follow[TypeDecMore]: VAR PROCEDURE BEGIN
+Follow[TypeDeclaration]: VAR PROCEDURE BEGIN
+Follow[TypeId]: =
+Follow[TypeName]: ; ID
+Follow[VarDec]: PROCEDURE BEGIN
+Follow[VarDecList]: PROCEDURE BEGIN
+Follow[VarDecMore]: PROCEDURE BEGIN
+Follow[VarDeclaration]: PROCEDURE BEGIN
+Follow[VarIdList]: ;
+Follow[VarIdMore]: ;
+Follow[VariMore]: = / DO := * ] - THEN ENDWH END + , ) FI < ELSE ;
+Follow[Variable]: = / DO * ] - THEN ENDWH END + , ) FI < ELSE ;

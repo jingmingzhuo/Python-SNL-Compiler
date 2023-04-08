@@ -38,22 +38,22 @@ First[[]: [
 First[]]: ]
 First[ActParamList]: ( INTC ε ID
 First[ActParamMore]: , ε
-First[AddOp]: - +
+First[AddOp]: + -
 First[ArrayType]: ARRAY
-First[AssCall]: . ( := [
-First[AssignmentRest]: . := [
-First[BaseType]: INTEGER CHAR
+First[AssCall]: ( . [ :=
+First[AssignmentRest]: . [ :=
+First[BaseType]: CHAR INTEGER
 First[CallStmRest]: (
 First[CmpOp]: < =
 First[ConditionalStm]: IF
-First[DeclarePart]: PROCEDURE TYPE VAR ε
+First[DeclarePart]: PROCEDURE VAR TYPE ε
 First[Exp]: ( INTC ID
 First[Factor]: ( INTC ID
 First[FidMore]: , ε
-First[FieldDecList]: INTEGER ARRAY CHAR
-First[FieldDecMore]: CHAR INTEGER ε ARRAY
+First[FieldDecList]: CHAR ARRAY INTEGER
+First[FieldDecMore]: INTEGER CHAR ARRAY ε
 First[FieldVar]: ID
-First[FieldVarMore]: ε [
+First[FieldVarMore]: [ ε
 First[FormList]: ID
 First[IdList]: ID
 First[IdMore]: , ε
@@ -64,16 +64,16 @@ First[Low]: INTC
 First[MultOp]: * /
 First[OtherFactor]: * ε /
 First[OtherRelE]: < =
-First[OtherTerm]: + ε -
+First[OtherTerm]: + - ε
 First[OutputStm]: WRITE
-First[Param]: INTEGER ARRAY VAR CHAR RECORD ID
-First[ParamDecList]: INTEGER ARRAY VAR CHAR RECORD ID
-First[ParamList]: INTEGER ARRAY VAR CHAR RECORD ε ID
-First[ParamMore]: ; ε
+First[Param]: CHAR ARRAY INTEGER ID RECORD VAR
+First[ParamDecList]: CHAR ARRAY INTEGER ID RECORD VAR
+First[ParamList]: ID CHAR ARRAY ε INTEGER RECORD VAR
+First[ParamMore]: ε ;
 First[ProcBody]: BEGIN
 First[ProcDec]: PROCEDURE ε
 First[ProcDecMore]: PROCEDURE ε
-First[ProcDecPart]: PROCEDURE TYPE VAR ε
+First[ProcDecPart]: PROCEDURE VAR TYPE ε
 First[ProcDeclaration]: PROCEDURE
 First[ProcName]: ID
 First[Program]: PROGRAM
@@ -83,9 +83,9 @@ First[ProgramName]: ID
 First[RecType]: RECORD
 First[RelExp]: ( INTC ID
 First[ReturnStm]: RETURN
-First[Stm]: WHILE WRITE ID RETURN IF READ
-First[StmList]: WHILE WRITE ID RETURN IF READ
-First[StmMore]: ; ε
+First[Stm]: READ ID WRITE RETURN WHILE IF
+First[StmList]: READ ID WRITE RETURN WHILE IF
+First[StmMore]: ε ;
 First[StructureType]: RECORD ARRAY
 First[Term]: ( INTC ID
 First[Top]: INTC
@@ -94,12 +94,12 @@ First[TypeDecList]: ID
 First[TypeDecMore]: ε ID
 First[TypeDeclaration]: TYPE
 First[TypeId]: ID
-First[TypeName]: INTEGER ARRAY CHAR RECORD ID
+First[TypeName]: CHAR ARRAY INTEGER ID RECORD
 First[VarDec]: VAR ε
-First[VarDecList]: INTEGER ARRAY CHAR RECORD ID
-First[VarDecMore]: INTEGER ARRAY CHAR RECORD ε ID
+First[VarDecList]: CHAR ARRAY INTEGER ID RECORD
+First[VarDecMore]: ID CHAR ARRAY ε INTEGER RECORD
 First[VarDeclaration]: VAR
 First[VarIdList]: ID
 First[VarIdMore]: , ε
-First[VariMore]: . ε [
+First[VariMore]: . [ ε
 First[Variable]: ID

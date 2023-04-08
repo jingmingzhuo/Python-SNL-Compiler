@@ -38,14 +38,4 @@ if __name__ == '__main__':
   _analyser = analyser.Analyzer(tokenList, tree)
   _analyser.analyze()
 
-  # TODO
-  # tree.goRoot()
-  # cnt = grammar.dfs(tree.now, 0)
-  # log(f'[[treeNodeCount]] -- {cnt}')
-  # tmp = tree.nextNode()
-  # flg = True
-  # while flg:
-  #   log(f'[[treeNode]] -- {tree.now.getNodeKind()}, {tree.now.getNodeVal()}')
-  #   flg = next(tmp)
-
   # TODO 中间代码优化

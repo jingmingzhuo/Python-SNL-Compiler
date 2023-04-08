@@ -4,6 +4,7 @@ class BaseType(object):
   def __init__(self, size=1, kind=None):
     self.size = size
     self.type = kind
+    self.element = None
 
   def __repr__(self) -> str:
     return self.type if type(self.type) == str else self.type.__str__()
@@ -12,10 +13,10 @@ class BaseType(object):
     return self.type if type(self.type) == str else self.type.__str__()
 
 
-class ArrayType(BaseType):
-  def __init__(self, size=None, low=None, top=None, element=None) -> None:
-    self.size = size
-    self.type = 'arrayType'
+class ArrayType(object):
+  def __init__(self, low=None, top=None, element=None) -> None:
+    self.size = (top - low + 1) * element.size;
+    self.kind = 'arrayType'
     self.low = low
     self.top = top
     self.element = element
@@ -23,25 +24,30 @@ class ArrayType(BaseType):
   def __repr__(self) -> str:
     return 'array[%d .. %d] of %s' % (self.low, self.top, self.element.type)
 
+  def __str__(self) -> str:
+    return 'array[%d .. %d] of %s' % (self.low, self.top, self.element.type)
 
-class RecordType(BaseType):
+
+class RecordType(object):
   def __init__(self, size=None, fieldList=None) -> None:
-    self.type = 'recordType'
     self.size = size
+    self.kind = 'recordType'
     self.fieldList = fieldList
 
   def __repr__(self) -> str:
     return 'record %s' % (self.fieldList)
 
+  def __str__(self) -> str:
+    return 'recordType'
+
 class Symbol(object):
-  def __init__(self, name=None, kind=None, type: BaseType=None) -> None:
+  def __init__(self, name=None, kind=None, type=None) -> None:
     self.name = name
     self.decKind = kind
     self.typePtr = type
 
   def __repr__(self) -> str:
-    log(f'[[symbol-value]] --- {self.name}, {self.decKind}, {self.typePtr}')
-    return "%s\t%s\t%s" % (self.name, self.decKind, self.typePtr)
+    return "%s\t\t\t%s\t\t%s" % (self.name, self.decKind, self.typePtr)
 
 class VarSymbol(Symbol):
   def __init__(self, name=None, type=None, access=None, level=None, off=None, value=None) -> None:
@@ -53,7 +59,7 @@ class VarSymbol(Symbol):
     self.value = value
 
   def __repr__(self) -> str:
-    return "%s\t%s\t%s\t%s" % (
+    return "%s\t%s\t\t%s\t\t%s" % (
       super().__repr__(),
       self.access,
       self.level,
@@ -78,7 +84,7 @@ class ProcedureSymbol(Symbol):
     self.forward = forward
 
   def __repr__(self):
-    return "%s\t%s\t%s" % (
+    return "%s\t%s\t\t%s" % (
       super().__repr__(),
       self.level,
       self.off
@@ -86,7 +92,7 @@ class ProcedureSymbol(Symbol):
 
 
 class SymbolTable(list):
-  def add(self, symbol: Symbol):
+  def add(self, symbol):
     self.append(symbol)
     log(f'[[symbol-table]] -- {self}')
 
@@ -100,8 +106,7 @@ class SymbolTable(list):
     return None
 
   def __repr__(self) -> str:
-    return '''
-    '''.join([''] + [str(i) for i in self])
+    return '\n\t'.join([''] + [str(i) for i in self])
 
   def __contains__(self, item: str) -> bool:
     for sym in self:

@@ -2,10 +2,11 @@ from grammar.getGrammar import getGrammar
 from grammar.ThreeSet import getAnalysisTable
 from grammar.TokenProcessing import TokenProcessing
 from grammar.GrammarTree import GrammarNode, GrammarTree
+from grammar.Visualization import visualization
 from util.logger import log
 
 def LL1(grammar:dict,analysisTable:dict,token:TokenProcessing)->GrammarTree:
-    tree:GrammarTree=GrammarTree(GrammarNode(None,None,-1,0,grammar['S'],grammar['S'],'VN'))
+    tree:GrammarTree=GrammarTree(GrammarNode(None,None,0,-1,grammar['S'],grammar['S'],'VN'))
     stack:list=[]
     stack.append(grammar['S'])
     # log(f'[[LL1]]')
@@ -49,7 +50,7 @@ def LL1(grammar:dict,analysisTable:dict,token:TokenProcessing)->GrammarTree:
                 # log(f'[[tree.now]] -- {tree.now}')
 
                 kind:str=product[i]
-                tree.addChild(GrammarNode(tree.getNow(),None,-1,tree.getNodeNum(),kind,kind,symbol,None))
+                tree.addChild(GrammarNode(tree.getNow(),None,tree.getNodeNum(),-1,kind,kind,symbol,None))
             tree.goChild()
             for i in range(length-1,-1,-1):
                 stack.append(product[i])
@@ -81,7 +82,10 @@ def run(tokenList: list=None):
     # token=TokenProcessing(model='list', tokenList=tokenList)
     token=TokenProcessing('read', 'out.txt')
     tree=LL1(grammar,analysisTable,token)
+    tree.goRoot()
+    visualization(grammar,tree)
     # log(tree.getRoot())
+
     return tree
 
 if __name__=='__main__':

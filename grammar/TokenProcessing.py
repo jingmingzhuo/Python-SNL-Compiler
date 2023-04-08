@@ -29,7 +29,7 @@ class TokenProcessing(object):
             return False
 
 if __name__=='__main__':
-    token=tokenProcessing('read','tokenList.txt')
+    token=TokenProcessing('read','tokenList.txt')
     token.next()
     print(token.getNowToken())
 

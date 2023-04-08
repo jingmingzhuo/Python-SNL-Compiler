@@ -34,6 +34,9 @@ class RecordType(object):
     self.kind = 'recordType'
     self.fieldList = fieldList
 
+  def get_field(self, name: str):
+    return self.fieldList.get(name)
+
   def __repr__(self) -> str:
     return 'record %s' % (self.fieldList)
 
@@ -83,13 +86,15 @@ class ProcedureSymbol(Symbol):
     self.size = size
     self.forward = forward
 
+  def get_param(self, i: int) -> VarSymbol: 
+    return self.param[i]
+
   def __repr__(self):
     return "%s\t%s\t\t%s" % (
       super().__repr__(),
       self.level,
       self.off
     )
-
 
 class SymbolTable(list):
   def add(self, symbol):
@@ -113,4 +118,3 @@ class SymbolTable(list):
       if sym.name == item:
         return True
     return False
-

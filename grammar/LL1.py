@@ -5,7 +5,7 @@ from grammar.GrammarTree import GrammarNode, GrammarTree
 from util.logger import log
 
 def LL1(grammar:dict,analysisTable:dict,token:TokenProcessing)->GrammarTree:
-    tree:GrammarTree=GrammarTree(GrammarNode(None,None,-1,grammar['S'],grammar['S'],'VN'))
+    tree:GrammarTree=GrammarTree(GrammarNode(None,None,-1,0,grammar['S'],grammar['S'],'VN'))
     stack:list=[]
     stack.append(grammar['S'])
     # log(f'[[LL1]]')
@@ -49,7 +49,7 @@ def LL1(grammar:dict,analysisTable:dict,token:TokenProcessing)->GrammarTree:
                 # log(f'[[tree.now]] -- {tree.now}')
 
                 kind:str=product[i]
-                tree.addChild(GrammarNode(tree.getNow(),None,-1,kind,kind,symbol,None))
+                tree.addChild(GrammarNode(tree.getNow(),None,-1,tree.getNodeNum(),kind,kind,symbol,None))
             tree.goChild()
             for i in range(length-1,-1,-1):
                 stack.append(product[i])
@@ -81,7 +81,6 @@ def run(tokenList: list=None):
     # token=TokenProcessing(model='list', tokenList=tokenList)
     token=TokenProcessing('read', 'out.txt')
     tree=LL1(grammar,analysisTable,token)
-
     # log(tree.getRoot())
     return tree
 

@@ -6,6 +6,7 @@ class GrammarNode(object):
         self,
         father,
         sibling,
+        nodeID: int,
         lineno: int,
         nodeKind: str,
         nodeVal: str,
@@ -15,7 +16,8 @@ class GrammarNode(object):
         self.father:GrammarNode=father
         self.sibling:GrammarNode=sibling
         self.children:list=[]
-        self.childNum:int=0
+        self.childNum:int=0    
+        self.nodeID:int=nodeID
 
         self.lineNo:int=lineno
         self.symbol=symbol
@@ -52,6 +54,9 @@ class GrammarNode(object):
 
     def isNodeKind(self, nodeKind: str):
         return self.nodeKind == nodeKind
+    
+    def getNodeID(self)->int:
+        return self.nodeID
 
 class GrammarTree(object):
     def __init__(self,root:GrammarNode)->None:
@@ -87,6 +92,9 @@ class GrammarTree(object):
         # log(f'[[child]] -- {child}')
         self.now.addChild(child)
         self.nodeNum=self.nodeNum+1
+
+    def getNodeNum(self)->int:
+        return self.nodeNum
 
     # 迭代器
     def nextNode(self)->bool:

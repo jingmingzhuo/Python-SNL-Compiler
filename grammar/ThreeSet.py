@@ -31,12 +31,12 @@ def getFirst(grammar:dict)->dict:
         firstSet[symbol].add(symbol)
     for symbol in grammar['VN']:
         firstSet[symbol]=getFirstLeft(grammar,symbol)
-    f=open(assetDir + 'SNL_First.txt','w',encoding='utf-8')
-    for symbol in firstSet:
-        f.write('First['+symbol+']:')
-        for i in firstSet[symbol]:
-            f.write(' '+i)
-        f.write('\n')
+    # f=open(assetDir + 'SNL_First.txt','w',encoding='utf-8')
+    # for symbol in firstSet:
+    #     f.write('First['+symbol+']:')
+    #     for i in firstSet[symbol]:
+    #         f.write(' '+i)
+    #     f.write('\n')
     return firstSet
 
 def getFollow(grammar:dict,firstSet:dict)->dict:
@@ -67,12 +67,12 @@ def getFollow(grammar:dict,firstSet:dict)->dict:
                     if tmp==l:followSet[production[j]]=followSet[production[j]].union(followSet[symbol])
         nowSet=[len(followSet[symbol]) for symbol in followSet]
         if nowSet==preSet:followFlag=False
-    f=open(assetDir + 'SNL_Follow.txt','w',encoding='utf-8')
-    for symbol in followSet:
-        f.write('Follow['+symbol+']:')
-        for i in followSet[symbol]:
-            f.write(' '+i)
-        f.write('\n')
+    # f=open(assetDir + 'SNL_Follow.txt','w',encoding='utf-8')
+    # for symbol in followSet:
+    #     f.write('Follow['+symbol+']:')
+    #     for i in followSet[symbol]:
+    #         f.write(' '+i)
+    #     f.write('\n')
     return followSet
 
 def getPredict(grammar:dict)->dict:

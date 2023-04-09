@@ -829,7 +829,6 @@ def run(tokenList: list=None):
     # token=TokenProcessing('list', 'out.txt')
     tree=Program(token)
     tree.goRoot()
-    dfs(tree.getNow(),0)
     visualization(grammar,tree)
     # log(tree.getRoot())
 

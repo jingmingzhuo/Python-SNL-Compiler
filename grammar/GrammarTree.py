@@ -53,6 +53,9 @@ class GrammarNode(object):
     def isNodeKind(self, nodeKind: str):
         return self.nodeKind == nodeKind
 
+    def getNodeSemantic(self):
+        return self.semantic
+
 class GrammarTree(object):
     def __init__(self,root:GrammarNode)->None:
         self.root:GrammarNode=root

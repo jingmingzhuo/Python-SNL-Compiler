@@ -11,7 +11,7 @@ class GrammarNode(object):
         nodeKind: str,
         nodeVal: str,
         symbol: str,
-        _symbol: Symbol=None
+        semantic: Symbol=None
     ) -> None:
         self.father:GrammarNode=father
         self.sibling:GrammarNode=sibling
@@ -23,7 +23,7 @@ class GrammarNode(object):
         self.symbol=symbol
         self.nodeKind:str=nodeKind
         self.nodeVal:str=nodeVal
-        self._symbol = None
+        self.semantic = None
 
     def getFather(self):
         return self.father

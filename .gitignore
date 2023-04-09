@@ -136,3 +136,6 @@ out.txt
 assets/SNL_First.txt
 assets/SNL_Follow.txt
 assets/SNL_P.txt
+
+# output
+dist/**

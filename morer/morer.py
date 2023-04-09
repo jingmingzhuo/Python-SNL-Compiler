@@ -157,7 +157,7 @@ def panduan(Tlist):
             TokenList.append(message)
         else:
             message = Error(i[0],i[1])
-            TokenList.append(message)
+            raise Exception('morer--' + message.__str__())
             
     tokensText = '\n'.join(map(lambda x: x.__str__(), TokenList))
     print(tokensText, file = f)

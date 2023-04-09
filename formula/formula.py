@@ -16,6 +16,18 @@ class arg(object):
         self.dataoff = dataoff
         self.access = access
 
+    def message(self):
+        if(self.form == "ValueForm"):
+            return "ValueForm" + ' ' + str(self.value)
+        elif(self.form == "TempForm"):
+            return "TempForm" + ' ' + str(self.name)
+        elif(self.form == "LabelForm"):
+            return "LabelForm" + ' ' + str(self.name)
+        elif(self.form == "AddrForm"):
+            return "AddrForm" + ' ' + str(self.name) + ' ' + str(self.datalevel) + ' ' + str(self.dataoff) + ' ' + str(self.access)
+        else:
+            return "Error"
+
 
 class formula(object):
 
@@ -34,23 +46,45 @@ class formula(object):
     def getNext(self):
         return self.next
     
+    def sample(self):
+        if (self.arg3 != None):
+            return "(%s, %s, %s, %s )" % (self.codekind, self.arg1.name, self.arg2.name, self.arg3.name)
+        elif(self.arg2 != None):
+            return "(%s, %s, %s, _ ) " % (self.codekind, self.arg1.name, self.arg2.name)
+        elif(self.arg1 != None):
+            return "(%s, %s, _ , _ ) " % (self.codekind, self.arg1.name)
+        else:
+            return "(%s, _ , _ , _ )" % (self.codekind)
+
     def __str__(self) -> str:
         if (self.arg3 != None):
-            return "(%s, %s, %s, %s)" % (self.codekind, self.arg1.name, self.arg2.name, self.arg3.name)
+            arg1Message = self.arg1.message()
+            arg2Message = self.arg2.message()
+            arg3Message = self.arg3.message()
+            return "(%s, %s, %s, %s ) || %s || %s || %s || " % (self.codekind, self.arg1.name, self.arg2.name, self.arg3.name, arg1Message, arg2Message, arg3Message)
         elif(self.arg2 != None):
-            return "(%s, %s, %s, _ )" % (self.codekind, self.arg1.name, self.arg2.name)
+            arg1Message = self.arg1.message()
+            arg2Message = self.arg2.message()
+            return "(%s, %s, %s, _ ) || %s || %s || " % (self.codekind, self.arg1.name, self.arg2.name, arg1Message, arg2Message)
         elif(self.arg1 != None):
-            return "(%s, %s, _ , _ )" % (self.codekind, self.arg1.name)
+            arg1Message = self.arg1.message()
+            return "(%s, %s, _ , _ ) || %s || " % (self.codekind, self.arg1.name, arg1Message)
         else:
             return "(%s, _ , _ , _ )" % (self.codekind)
 
     def __repr__(self) -> str:
-        if(self.arg2 != None and self.arg3 != None):
-            return "(%s, %s, %s, %s)" % (self.codekind, self.arg1.name, self.arg2.name, self.arg3.name)
+        if (self.arg3 != None):
+            arg1Message = self.arg1.message()
+            arg2Message = self.arg2.message()
+            arg3Message = self.arg3.message()
+            return "(%s, %s, %s, %s || %s || %s || %s )" % (self.codekind, self.arg1.name, self.arg2.name, self.arg3.name, arg1Message, arg2Message, arg3Message)
         elif(self.arg2 != None):
-            return "(%s, %s, %s, _ )" % (self.codekind, self.arg1.name, self.arg2.name)
+            arg1Message = self.arg1.message()
+            arg2Message = self.arg2.message()
+            return "(%s, %s, %s, _ || %s || %s )" % (self.codekind, self.arg1.name, self.arg2.name, arg1Message, arg2Message)
         elif(self.arg1 != None):
-            return "(%s, %s, _ , _ )" % (self.codekind, self.arg1.name)
+            arg1Message = self.arg1.message()
+            return "(%s, %s, _ , _ || %s )" % (self.codekind, self.arg1.name, arg1Message)
         else:
             return "(%s, _ , _ , _ )" % (self.codekind)
 
@@ -90,6 +124,15 @@ class formulaList(object):
         self.current = self.firstCode
         while(self.current != None):
             print(self.current, file=f)
+            self.goNext()
+        print(str(self.label_table.labeldict), file=f)
+        f.close()
+
+    def show2(self):
+        f = open('formulaout.txt', 'w')
+        self.current = self.firstCode
+        while(self.current != None):
+            print(self.current.sample(), file=f)
             self.goNext()
         print(str(self.label_table.labeldict), file=f)
         f.close()

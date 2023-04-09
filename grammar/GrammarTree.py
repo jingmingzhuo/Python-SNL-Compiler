@@ -93,6 +93,9 @@ class GrammarTree(object):
         self.now.addChild(child)
         self.nodeNum=self.nodeNum+1
 
+    def addNodeNum(self)->None:
+        self.nodeNum=self.nodeNum+1
+        
     def getNodeNum(self)->int:
         return self.nodeNum
 

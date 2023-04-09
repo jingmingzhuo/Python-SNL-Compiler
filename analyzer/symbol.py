@@ -31,7 +31,7 @@ class ArrayType(object):
 class RecordType(object):
   def __init__(self, size=None, fieldList=None) -> None:
     self.size = size
-    self.kind = 'recordType'
+    self.type = 'recordType'
     self.fieldList = fieldList
 
   def get_field(self, name: str):

@@ -104,7 +104,7 @@ class Analyzer(object):
         os._exit(1)
 
   def assign_type_check(self, type_left, type_right):
-    log(f'[[left-type]] --- {type(str(type_left))}')
+    log(f'[[left-type]] --- {str(type_left)}')
     if str(type_left) == 'INTEGER':
       log(f'[[left-INTEGER]]')
       return str(type_right) == 'INTEGER' or str(type_right) == 'INTC'
@@ -403,8 +403,13 @@ class Analyzer(object):
 
         for symTable in self.scope[::-1]:
           if idName in symTable:
-            varError = False
             var = symTable.get(idName)
+            if var.decKind == 'typeDec':
+              self.isErr = True
+              self.msgErr = SemanticError().InvalidAssignLeft % idName
+              self.print_error()
+
+            varError = False
             log(f'[[stm-list-var-name]] --- {var.name}')
             log(f'[[stm-list-var-type]] --- {var.typePtr}')
             idNode.semantic = var
@@ -429,9 +434,14 @@ class Analyzer(object):
           elif choice == '[':
             indType, _ = self.expression()
             log(f'[[should-compare-type-here]] --- 7')
-            log(f'[[should-ind-type-be]] --- {type(var.typePtr)}')
+            log(f'[[should-ind-type-be]] --- {type(indType)}')
+            if isinstance(indType, str):
+              self.isErr = True
+              self.msgErr = SemanticError.ArrayDefineError
+              self.print_error()
+
             if indType.type.__str__() not in ['INTEGER', 'INTC']:
-              self.error = True
+              self.isErr = True
               self.msgErr = SemanticError.TypeMatchError % ('INTC', indType)
               self.print_error()
 
@@ -444,7 +454,7 @@ class Analyzer(object):
             self.step_into('ID')
             fieldName = self.root.now.getNodeVal()
             
-            if var.typePtr.kind != 'recordType':
+            if var.typePtr.type != 'recordType':
               self.isErr = True
               self.msgErr = SemanticError.TypeMatchError % (
                 'recordType',

@@ -2,7 +2,6 @@ import sys, os
 import grammar.LL1 as grammar
 import morer.morer as morer 
 import analyzer.semantic as analyser
-from grammar.getGrammar import run
 from util.logger import log, set_debug
 
 def __get_token_and_tree(snlText: str):

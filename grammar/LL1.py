@@ -1,9 +1,11 @@
+import os
 from grammar.getGrammar import getGrammar 
 from grammar.ThreeSet import getAnalysisTable
 from grammar.TokenProcessing import TokenProcessing
 from grammar.GrammarTree import GrammarNode, GrammarTree
 from grammar.Visualization import visualization
 from util.logger import log
+from grammar.grammarException import TypeError,RedundancyError
 
 def LL1(grammar:dict,analysisTable:dict,token:TokenProcessing)->GrammarTree:
     tree:GrammarTree=GrammarTree(GrammarNode(None,None,0,-1,grammar['S'],grammar['S'],'VN'))
@@ -14,12 +16,21 @@ def LL1(grammar:dict,analysisTable:dict,token:TokenProcessing)->GrammarTree:
         # log(f'[[stack]] -- {stack}')    
         nowToken:list=token.getNowToken()
         # log(f'[[token]] -- {nowToken}')
+        try:
+            if not stack:
+                raise RedundancyError(nowToken[2])
+        except RecursionError as e:
+            print(e)
+            os._exit(0)
 
         nowLeft=stack[-1]
         if nowLeft not in grammar['VN']:
-            if nowLeft!='ε' and nowToken[0]!=nowLeft:
-                print('ERROR1')
-                return None
+            try:
+                if nowLeft!='ε' and nowToken[0]!=nowLeft:
+                    raise TypeError(nowToken[2],nowLeft,nowToken[0])
+            except TypeError as e:
+                print(e) 
+                os._exit(0)
 
             if nowLeft!='ε':
                 tree.getNow().nodeVal=nowToken[1]
@@ -36,9 +47,12 @@ def LL1(grammar:dict,analysisTable:dict,token:TokenProcessing)->GrammarTree:
 
         else:
             num=analysisTable[nowLeft][nowToken[0]]
-            if num==-1:
-                log('ERROR2')
-                return None
+            try:
+                if num==-1:
+                    raise TypeError(nowToken[2],nowLeft,nowToken[0])
+            except TypeError as e:
+                print(e)
+                os._exit(0)
 
             stack.pop()
             product=grammar['P'][nowLeft][num]

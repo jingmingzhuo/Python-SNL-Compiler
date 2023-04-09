@@ -5,7 +5,7 @@ def visualization(grammar:dict,tree:GrammarTree)->None:
     generator=tree.nextNode()
     flag=True
     while flag:
-        color='black'
+        color='blue'
         name='node'+str(tree.getNow().getNodeID())
         if tree.getNow().getNodeKind() in grammar['VT']:
             color='red'

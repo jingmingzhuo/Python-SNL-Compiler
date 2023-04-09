@@ -58,6 +58,9 @@ class GrammarNode(object):
     def getNodeID(self)->int:
         return self.nodeID
 
+    def getNodeSemantic(self):
+        return self.semantic
+
 class GrammarTree(object):
     def __init__(self,root:GrammarNode)->None:
         self.root:GrammarNode=root

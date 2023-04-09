@@ -228,12 +228,10 @@ class Analyzer(object):
           break
 
         self.step_into('ID')
+        log(f'[[type-name-is]] --- {typeName}')
         sym: VarSymbol = VarSymbol(
-          type=BaseType(
-            kind=typeName, 
-            size=typeName.size
-          ),
-          name = self.root.now.getNodeVal(),
+          type=typeName,
+          name=self.root.now.getNodeVal(),
           access='dir',
           level=self.levelCurrent,
           off=self.offsetCurrent[-1]
@@ -266,7 +264,7 @@ class Analyzer(object):
       ): break
 
       self.step_into('ProcName')
-      self.step()
+      self.step_into('ID')
 
       # 函数名存放在 ProcName 下一步的节点上（第一个子节点）
       procName = self.root.now.getNodeVal()
@@ -277,6 +275,8 @@ class Analyzer(object):
         level=self.levelCurrent,
         off=self.offsetCurrent[-1],
       )
+
+      self.root.now.semantic = proc
 
       symTable = SymbolTable()
       symTable.add(proc)
@@ -772,6 +772,7 @@ class Analyzer(object):
       return var.typePtr, self.root.now.getNodeVal()
     if choice == '[':
       log(f'[[should-compare-type-here]] --- 5')
+      log(f'[[type-of-vari-array]] --- {type(var.typePtr)}')
       return self.expression()
     if choice == '.':
       self.step_into('FieldVar')
@@ -788,7 +789,7 @@ class Analyzer(object):
         )
         self.print_error(var)
       
-      fieldList = var.typePtr.type.fieldList
+      fieldList = var.typePtr.fieldList
       if fieldName not in fieldList:
         self.isErr = True
         self.msgErr = SemanticError.UndefinedField % fieldName

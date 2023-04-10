@@ -1,9 +1,20 @@
-GLOBAL:
-  GRAMMAR_METHOD: 'LL1'
-  GRAMMAR_TREE_VISUALIZATION: TRUE
+MORER :
+  SNL_TEXT : "test/test0.snl"
+  OUT_ADDRESS : 'morer/out.txt'
 
 GRAMMAR:
-  START: 'Program'
-  PRODUCTION_ADDRESS: 'assets\SNL_P.txt'
-  VT_ADDRESS: 'assets\SNL_VT.txt'
-  VN_ADDRESS: 'assets\SNL_VN.txt'
+  GRAMMAR_METHOD : 'LL1'
+  START : 'Program'
+  PRODUCTION_ADDRESS : 'assets/SNL_P.txt'
+  VT_ADDRESS : 'assets/SNL_VT.txt'
+  VN_ADDRESS : 'assets/SNL_VN.txt'
+  GRAMMAR_TREE_VISUALIZATION : TRUE
+  VISUAL_ADDRESS : 'grammar/GrammarTree'
+  VISUAL_VN_COLOR : 'blue'
+  VISUAL_VT_COLOR : 'red'
+  VISUAL_EPS_COLOR : 'yellow'
+
+
+FORMULA :
+  OUT_ADDRESS : 'dist/a.out'
+  CHOOSE : 'sample'

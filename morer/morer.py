@@ -136,8 +136,9 @@ def fenli(List):
     return ResultList
 
 #判断分离出来字符所属的类别并输出
-def panduan(Tlist):
-    f = open('out.txt','w')
+def panduan(config,Tlist):
+    address = config.MORER.OUT_ADDRESS
+    f = open(address,'w')
     TokenList = []
     for i in Tlist:
         if i[0] in KeyWord:
@@ -166,7 +167,7 @@ def panduan(Tlist):
     return TokenList
 
 #主函数
-def run(snlText: str):
+def run(config,snlText: str):
     p = []
     w = []
     tokensText = ''
@@ -180,7 +181,7 @@ def run(snlText: str):
     #w.append('v1')
     y = fenli(p)
     #log(y)
-    tokenList = panduan(y)
+    tokenList = panduan(config,y)
     return tokenList 
 
 if __name__ == '__main__':

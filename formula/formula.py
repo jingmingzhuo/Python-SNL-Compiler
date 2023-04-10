@@ -128,8 +128,8 @@ class formulaList(object):
         print(str(self.label_table.labeldict), file=f)
         f.close()
 
-    def show2(self):
-        f = open('formulaout.txt', 'w')
+    def show2(self, output):
+        f = open(output, 'w')
         self.current = self.firstCode
         while(self.current != None):
             print(self.current.sample(), file=f)

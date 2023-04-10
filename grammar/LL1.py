@@ -79,14 +79,13 @@ def dfs(now:GrammarNode,cnt:int)->int:
         num=num+1
     return cnt
 
-def run(tokenList: list=None):
-    grammar={}
-    grammar['S']='Program'
+def run(config,tokenList: list=None):
+    grammar = {}
+    grammar['S'] = config.GRAMMAR.START
 
-    assetDir='assets/'
-    pAddress=assetDir+'SNL_P.txt'
-    vnAddress=assetDir+'SNL_VN.txt'
-    vtAddress=assetDir+'SNL_VT.txt'
+    pAddress = config.GRAMMAR.PRODUCTION_ADDRESS
+    vnAddress = config.GRAMMAR.VN_ADDRESS
+    vtAddress = config.GRAMMAR.VT_ADDRESS
 
     # 初始化
     grammar=getGrammar(grammar,pAddress,vnAddress,vtAddress)
@@ -97,7 +96,8 @@ def run(tokenList: list=None):
     # token=TokenProcessing('list', 'out.txt')
     tree=LL1(grammar,analysisTable,token)
     tree.goRoot()
-    visualization(grammar,tree)
+    if config.GRAMMAR.GRAMMAR_TREE_VISUALIZATION:
+        visualization(config,grammar,tree)
     # log(tree.getRoot())
 
     return tree
